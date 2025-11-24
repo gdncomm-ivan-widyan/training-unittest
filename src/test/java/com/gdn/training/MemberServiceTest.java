@@ -55,16 +55,21 @@ class MemberServiceTest {
   @Test
   @DisplayName("suspendMember should set suspended to true and save member when valid")
   void suspendMember_validMember_suspendsAndSaves() {
-    String memberId = "123";
-    Member member = new Member();
-    member.setSuspended(false);
+    String id = "123";
+    String name = "ivan";
+    String email = "ivan@ivan.com";
+    Member member = Member.builder().suspended(false).email(email).id(id).name(name).build();
 
-    when(memberRepository.getMember(memberId)).thenReturn(member);
+    when(memberRepository.getMember(id)).thenReturn(member);
 
-    memberService.suspendMember(memberId);
+    memberService.suspendMember(id);
 
     assertTrue(member.isSuspended());
-    verify(memberRepository).getMember(memberId);
+    assertEquals(email, member.getEmail());
+    assertEquals(id, member.getId());
+    assertEquals(name, member.getName());
+
+    verify(memberRepository).getMember(id);
     verify(memberRepository).save(member);
   }
 }
